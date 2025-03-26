@@ -1,0 +1,7 @@
+2025-03-26 13:13:10,154 - INFO - HTTP Request: POST https://sdzzrorwvwtmzrmtjhqi.supabase.co/rest/v1/users "HTTP/2 201 Created"
+2025-03-26 13:16:38,949 - INFO - HTTP Request: POST https://sdzzrorwvwtmzrmtjhqi.supabase.co/rest/v1/users "HTTP/2 201 Created"
+2025-03-26 13:21:08,669 - INFO - HTTP Request: POST https://sdzzrorwvwtmzrmtjhqi.supabase.co/rest/v1/users "HTTP/2 201 Created"
+2025-03-26 13:22:35,526 - INFO - HTTP Request: PATCH https://sdzzrorwvwtmzrmtjhqi.supabase.co/rest/v1/users?email=eq.noha%40email.com "HTTP/2 200 OK"
+2025-03-26 13:35:28,640 - INFO - HTTP Request: POST https://sdzzrorwvwtmzrmtjhqi.supabase.co/rest/v1/users "HTTP/2 201 Created"
+2025-03-26 13:35:58,179 - INFO - HTTP Request: PATCH https://sdzzrorwvwtmzrmtjhqi.supabase.co/rest/v1/users?email=eq.ahmd%40email.com "HTTP/2 200 OK"
+2025-03-26 13:58:39,340 - INFO - HTTP Request: GET https://sdzzrorwvwtmzrmtjhqi.supabase.co/rest/v1/users?select=%2A&email=eq.test%40email.com "HTTP/2 200 OK"
