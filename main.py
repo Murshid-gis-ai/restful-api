@@ -61,6 +61,24 @@ class Site(BaseModel):
     longitude: float
     city_id: str
 
+class Event(BaseModel):
+    id: str
+    title: str
+    description: str
+    start_date: str
+    end_date: str
+    city_id: str
+
+class Tour(BaseModel):
+    id: str
+    title: str
+    description: str
+    duration: str
+    price: float
+    tour_schedule: str
+    city_id: str
+
+
 
 # إصدار JWT Token مع role
 def create_access_token(data: dict, expires_delta: timedelta = timedelta(hours=1)):
@@ -150,6 +168,33 @@ def add_location(site: Site, payload: dict = Depends(verify_token)):
         return {"message": "Location added successfully!"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+@app.post("/add_event", summary="Add Event (Admin)", description="Allows admin users to add new events. Requires JWT token with admin role.")
+def add_event(event: Event, payload: dict = Depends(verify_token)):
+    if payload.get("role") != "admin":
+        raise HTTPException(status_code=403, detail="Admins only")
+
+    try:
+        data = event.dict()
+        response = supabase.table("events").insert(data).execute()
+        print("Supabase Insert Event:", response)
+        return {"message": "Event added successfully!"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/add_tour", summary="Add Tour (Admin)", description="Allows admin users to add new tours. Requires JWT token with admin role.")
+def add_tour(tour: Tour, payload: dict = Depends(verify_token)):
+    if payload.get("role") != "admin":
+        raise HTTPException(status_code=403, detail="Admins only")
+
+    try:
+        data = tour.dict()
+        response = supabase.table("tours").insert(data).execute()
+        print("Supabase Insert Tour:", response)
+        return {"message": "Tour added successfully!"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 
 
 
