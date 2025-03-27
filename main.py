@@ -52,6 +52,16 @@ class UserRegister(BaseModel):
     password: str
     role: str = "user"
 
+class Site(BaseModel):
+    id: str
+    name: str
+    description: str
+    image_url: str
+    latitude: float
+    longitude: float
+    city_id: str
+
+
 # إصدار JWT Token مع role
 def create_access_token(data: dict, expires_delta: timedelta = timedelta(hours=1)):
     to_encode = data.copy()
@@ -84,8 +94,10 @@ def signup(user: UserRegister):
 
 
         # ✅ هنا تضيفين توليد رابط التوثيق
+       # ✅ توليد توكن التوثيق وإظهار الرابط
         verification_token = create_access_token({"email": user.email}, expires_delta=timedelta(hours=24))
-        print("Verification Link: http://127.0.0.1:8000/verify_email?token=" + verification_token)
+        print("Verification Link: https://murshidgis.duckdns.org/verify_email?token=" + verification_token)
+
 
         return {"message": "User created successfully!"}
     except Exception as e:
@@ -120,14 +132,27 @@ def login(user: UserLogin):
         print("Login Error:", e)
         raise HTTPException(status_code=401, detail="Login Failed")
 
-# ✅ Route محمي ويشيك على الـ role
+# ✅ Route محمي ويشيك جديد على الـ role
 @app.post("/add_location", summary="Add Location (Admin)", description="Allows admin users to add new locations. Requires JWT token with admin role.")
-def add_location(payload: dict = Depends(verify_token)):
+
+
+def add_location(site: Site, payload: dict = Depends(verify_token)):
     if payload.get("role") != "admin":
         raise HTTPException(status_code=403, detail="Admins only")
-    
-    # هنا تكمل تضيف الموقع أو أي عملية إدارية
-    return {"message": "Location added successfully!"}
+
+    try:
+        data = site.dict()
+        response = supabase.table("sites").insert(data).execute()
+
+        # اطبعي النتيجة للتجربة
+        print("Supabase Insert Response:", response)
+
+        return {"message": "Location added successfully!"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+
 
 # ✅ Route سحب بيانات من أي جدول مع حماية API KEY
 @app.get("/get_data/{table_name}", summary="Get Data From Table", description="Fetches data from the specified Supabase table. Requires JWT token and API Key for protection.")
