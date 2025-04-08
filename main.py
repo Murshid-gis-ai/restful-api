@@ -21,6 +21,16 @@ env_path = Path('.') / '.env'
 load_dotenv(dotenv_path=env_path)
 app = FastAPI()
 
+from fastapi.middleware.cors import CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # عند رفع المشروع استبدال النجمه بدومين المشروع 
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 # إعداد مفاتيح الـ JWT
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = "HS256"
